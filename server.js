@@ -1,36 +1,40 @@
-import bodyParser from "body-parser";
-import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
-import morgan from "morgan"
-import UserRouter from "./routes/user_routes.js"
+import dotenv from "dotenv";
+import cors from "cors";
+import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
+
 import authRouter from "./routes/auth_routes.js";
-import connectDB from "./config/Config.js";
-dotenv.config()
-let app =express();
+import ConnectDB from "./config/Config.js";
 
+dotenv.config();
+
+const app = express();
+
+// ES6 __dirname fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Middleware
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
-//routes
-app.use("/api/v1", UserRouter);
+// Serve static files from uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Routes
 app.use("/api/v1", authRouter);
 
 
-// Test route to check server functionality
-app.post("/data/api", (req, res) => {
-    res.send("Welcome to the server!");     
+// Test route
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
-
-    // db function to connect to the database
-connectDB();
-// server port
-let port =process.env.PORT;
+ConnectDB()
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
+  console.log(`Server running on http://localhost:${port}`);
 });
-
-

@@ -6,6 +6,9 @@ import { accesstoken, comparePassword, hashPassword } from "../utils/helper.js";
 export const RegisterUser=async(req,res)=>{
     try{
          let { username, email, password } = req.body;
+        
+         let image =req.file? req.file.path:null;
+          // Handle image upload if needed
         let emailExists= await User.findOne({ email:email})
         if(emailExists){
             return res.status(400).json({ message: "Email already exists" });
@@ -18,7 +21,8 @@ export const RegisterUser=async(req,res)=>{
         let newUser = new User({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            image,
         });
         let savedUser = await newUser.save();
         if (!savedUser) {

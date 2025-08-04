@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 let dbURI = process.env.URI
 
-let connectDB = async () => {
+let ConnectDB = async () => {
     try {
         await mongoose.connect(dbURI);
         console.log("MongoDB connected successfully");
@@ -12,4 +12,4 @@ let connectDB = async () => {
         process.exit(1); // Exit the process with failure
     }
 }
-export default connectDB;
+export default ConnectDB;
