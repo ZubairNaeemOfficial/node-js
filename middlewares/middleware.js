@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export let authenticateUser = async (req, res, next) => {
+export let AuthenticateUser = async (req, res, next) => {
   try{
     req.headers.authorization && req.headers.authorization.startsWith("Bearer");
     // "Bearer uwewioewpeiwiefwvxwncd.sxwxdwwxwhxwjkls"
